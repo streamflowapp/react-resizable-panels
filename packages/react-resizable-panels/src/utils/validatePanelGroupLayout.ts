@@ -63,30 +63,5 @@ export function validatePanelGroupLayout({
     }
   }
 
-  // If there is additional, left over space, assign it to any panel(s) that permits it
-  // (It's not worth taking multiple additional passes to evenly distribute)
-  if (!fuzzyNumbersEqual(remainingSize, 0)) {
-    for (let index = 0; index < panelConstraints.length; index++) {
-      const prevSize = nextLayout[index];
-      assert(prevSize != null);
-      const unsafeSize = prevSize + remainingSize;
-      const safeSize = resizePanel({
-        panelConstraints,
-        panelIndex: index,
-        size: unsafeSize,
-      });
-
-      if (prevSize !== safeSize) {
-        remainingSize -= safeSize - prevSize;
-        nextLayout[index] = safeSize;
-
-        // Once we've used up the remainder, bail
-        if (fuzzyNumbersEqual(remainingSize, 0)) {
-          break;
-        }
-      }
-    }
-  }
-
   return nextLayout;
 }
